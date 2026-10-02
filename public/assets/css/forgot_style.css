@@ -1,0 +1,297 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;600;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Montserrat", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #7a0000 100%);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* BACKGROUND DECORATION */
+body::before {
+    content: '';
+    position: fixed;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    opacity: 0.15;
+    z-index: 0;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -10%;
+    left: -5%;
+    width: 500px;
+    height: 500px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+.wrapper {
+    width: 420px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border-radius: 10px;
+    padding: 30px 40px;
+    border: 2px solid rgba(255, 59, 59, 0.3);
+    box-shadow: 0 8px 32px rgba(255, 59, 59, 0.2), 0 0 30px rgba(255, 59, 59, 0.1);
+    z-index: 1;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #ff9898 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    text-align: center;
+    color: #d0d0d0;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 59, 59, 0.3);
+    border-radius: 40px;
+    outline: none;
+    font-size: 16px;
+    color: white;
+    padding: 20px 45px 20px 20px;
+    transition: all 0.3s ease;
+}
+
+.input-box input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 59, 59, 0.7);
+    box-shadow: 0 0 20px rgba(255, 59, 59, 0.3);
+}
+
+.input-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.wrapper .btn {
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(135deg, #ff3b3b 0%, #ff6b6b 100%);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 4px 15px rgba(255, 59, 59, 0.4);
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.wrapper .btn:hover {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ff3b3b 100%);
+    box-shadow: 0 6px 25px rgba(255, 59, 59, 0.6);
+    transform: translateY(-2px);
+}
+
+.wrapper .btn:active {
+    transform: translateY(0);
+}
+
+.back-link {
+    font-size: 14px;
+    text-align: center;
+    margin: 25px 0 0;
+}
+
+.back-link p {
+    margin: 0;
+}
+
+.back-link p a {
+    color: #ff9898;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wrapper h1 {
+  animation: fadeInUp 1s ease-out;
+}
+
+.subtitle {
+  animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.input-box {
+  animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+.btn {
+  animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+.back-link {
+  animation: fadeInUp 1s ease-out 0.8s both;
+}
+
+/* SUCCESS MESSAGE STYLING */
+.success-message {
+    display: none;
+    background: rgba(59, 255, 59, 0.1);
+    border: 1px solid rgba(59, 255, 59, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+    color: #90ff90;
+    font-weight: 500;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.success-message i {
+    font-size: 24px;
+    margin-right: 8px;
+    color: #4ade80;
+}
+
+.error-message {
+    display: none;
+    background: rgba(255, 59, 59, 0.1);
+    border: 1px solid rgba(255, 59, 59, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 20px;
+    text-align: center;
+    color: #ff9090;
+    font-weight: 500;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.error-message i {
+    font-size: 24px;
+    margin-right: 8px;
+    color: #f87171;
+}
+
+/* LOADING SPINNER */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* PARTICLE EFFECT */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #ff3b3b;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particleFloat 3s ease-out forwards;
+}
+
+@keyframes particleFloat {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(0);
+    }
+}
+
+/* TYPING ANIMATION FOR SUBTITLE */
+.typing {
+    border-right: 2px solid #ff9898;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { border-color: #ff9898; }
+    51%, 100% { border-color: transparent; }
+}
+
+/* LOADING SPINNER */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
