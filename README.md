@@ -1,16 +1,48 @@
-# Workout App (Laravel)
+# Training.IT
 
-## Kebutuhan lokal
+Training.IT adalah aplikasi web workout yang membantu pengguna memilih program
+latihan, mengikuti sesi workout, dan mencatat progres latihan. Project ini
+dibuat menggunakan Laravel sebagai backend, MySQL sebagai database, serta Blade
+dan Vite untuk halaman dan asset frontend.
 
-- Laragon dengan MySQL aktif (port `3306`)
-- PHP `8.0.2` atau lebih baru, dengan ekstensi `pdo_mysql`
-- Composer
-- Node.js dan npm
+## Fitur
 
-## Menjalankan di Laragon
+- Registrasi, login, logout, dan alur reset password.
+- Onboarding setelah registrasi: pilih gender, lalu pilih program latihan.
+- Halaman latihan Gym, Cardio, dan Calisthenics.
+- Pencatatan sesi workout dan progres latihan.
+- Profil pengguna yang dapat dilihat dan diperbarui.
+- Katalog program dan latihan yang dapat dibuat ulang menggunakan database
+  migration dan seeder.
 
-1. Jalankan MySQL dari Laragon.
-2. Buat database kosong bernama `workout_app` di HeidiSQL/phpMyAdmin, atau jalankan:
+## Teknologi
+
+- PHP 8.0.2 atau lebih baru
+- Laravel 9
+- MySQL
+- Blade
+- Vite, Node.js, dan npm
+
+## Menjalankan secara lokal dengan Laragon
+
+### Prasyarat
+
+- Laragon dengan MySQL aktif.
+- PHP 8.0.2+ dengan ekstensi `pdo_mysql`.
+- Composer.
+- Node.js dan npm.
+
+### Setup
+
+1. Clone repository dan masuk ke folder project:
+
+   ```powershell
+   git clone https://github.com/Faurel30/Training.IT.git
+   cd Training.IT
+   ```
+
+2. Jalankan MySQL dari Laragon. Buat database kosong bernama `workout_app`
+   melalui HeidiSQL/phpMyAdmin, atau jalankan SQL berikut:
 
    ```sql
    CREATE DATABASE workout_app
@@ -18,7 +50,20 @@
        COLLATE utf8mb4_unicode_ci;
    ```
 
-3. Salin `.env.example` menjadi `.env` hanya jika belum memiliki `.env`. Jika `.env` sudah ada, pertahankan `APP_KEY` dan rahasia lain, lalu ubah pengaturan database lokalnya:
+3. Pasang dependency PHP dan frontend:
+
+   ```powershell
+   composer install
+   npm install
+   ```
+
+4. Buat file konfigurasi lokal dengan menyalin `.env.example`:
+
+   ```powershell
+   Copy-Item .env.example .env
+   ```
+
+   Atur koneksi database lokal di `.env`:
 
    ```dotenv
    APP_ENV=local
@@ -32,78 +77,45 @@
    DB_PASSWORD=
    ```
 
-   Jangan commit `.env` atau mengirim nilai `APP_KEY`/password database ke GitHub.
-
-4. Dari folder project ini, jalankan:
+   Buat application key dan siapkan database:
 
    ```powershell
-   composer install
-   npm install
-   npm run build
    php artisan key:generate
-   php artisan optimize:clear
    php artisan migrate --seed
+   ```
+
+5. Build asset frontend dan jalankan server:
+
+   ```powershell
+   npm run build
    php artisan serve
    ```
 
-   Jika `.env` sudah memiliki `APP_KEY`, tidak perlu menjalankan `key:generate`; mengganti key dapat membuat sesi login lama tidak berlaku.
+6. Buka <http://127.0.0.1:8000> dan buat akun untuk mencoba alur onboarding.
 
-5. Buka `http://127.0.0.1:8000`, lalu daftar akun baru. Seeder hanya mengisi katalog program dan latihan, bukan akun pengguna.
+Seeder mengisi katalog program dan latihan; akun pengguna dibuat melalui
+halaman registrasi aplikasi.
 
-Migration membuat tabel `programs`, `exercises`, `profiles`, `user_programs`, `workout_sessions`, dan `workout_progress`, beserta struktur pengguna bawaan Laravel. Seeder mengisi tiga program dan daftar latihan yang dipakai halaman workout.
+## Database
 
-## Menyiapkan database baru
-
-Migration dan seed bersifat terpisah:
+Migration Laravel mendefinisikan struktur database, sedangkan seeder mengisi
+katalog latihan awal:
 
 ```powershell
 php artisan migrate
 php artisan db:seed
 ```
 
-Untuk mengulang dari database lokal yang memang boleh dihapus, gunakan `php artisan migrate:fresh --seed`. Perintah itu menghapus seluruh tabel dan data pada database aktif; pastikan `.env` menunjuk ke `workout_app` lokal sebelum menjalankannya.
+Untuk mengulang database lokal dari awal, `php artisan migrate:fresh --seed`
+akan menghapus semua tabel dan data pada database yang sedang dikonfigurasi.
+Gunakan hanya jika database tersebut boleh dihapus.
 
-## Deploy ke Railway
+## Catatan keamanan
 
-Database MySQL Laragon hanya bisa diakses dari komputer lokal. Railway dapat
-menjalankan aplikasi Laravel dan MySQL production sebagai service terpisah di
-dalam project yang sama.
+- Jangan commit `.env`, password database, atau `APP_KEY` ke repository.
+- `.env.example` disediakan sebagai template; buat `.env` lokal sendiri.
+- Jangan menaruh data atau kredensial Laragon pada README maupun GitHub.
 
-1. Buat repository GitHub untuk project ini. Untuk repository public, pastikan
-   `.env` dan semua file `.env.*` selain `.env.example` tetap di-ignore.
-2. Di Railway, buat project baru dan deploy service aplikasi dari repository
-   GitHub tersebut. Railway mendeteksi Laravel dan menjalankannya dengan PHP-FPM
-   dan Caddy.
-3. Tambahkan service MySQL ke project Railway.
-4. Set environment variables pada service aplikasi:
+## Lisensi
 
-   ```dotenv
-   APP_ENV=production
-   APP_DEBUG=false
-   APP_KEY=<buat key unik untuk production>
-   APP_URL=<domain Railway aplikasi>
-   DB_CONNECTION=mysql
-   DB_HOST=${{MySQL.MYSQLHOST}}
-   DB_PORT=${{MySQL.MYSQLPORT}}
-   DB_DATABASE=${{MySQL.MYSQLDATABASE}}
-   DB_USERNAME=${{MySQL.MYSQLUSER}}
-   DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
-   ```
-
-   Ganti `MySQL` pada referensi variabel dengan nama service database yang
-   sebenarnya. Masukkan rahasia hanya di Railway Variables, jangan di GitHub.
-5. Pastikan asset frontend dibangun (`npm run build`) saat proses build Railway.
-   Setelah database production tersedia dan variabel koneksi sudah dicek, jalankan
-   `php artisan migrate --force` sekali terhadap service aplikasi.
-6. Generate domain publik pada pengaturan Networking service aplikasi, lalu
-   perbarui `APP_URL` dengan domain tersebut dan deploy ulang.
-
-Jangan menyalin database lokal atau kredensial Laragon ke production. Seeder
-katalog dapat dijalankan terpisah jika database production baru membutuhkan
-program dan daftar latihan: `php artisan db:seed --force`. Jangan menjalankan
-`migrate:fresh` pada production.
-
-Untuk menghindari menyimpan sesi login hanya di filesystem container, atur
-session Laravel ke penyimpanan yang persisten sebelum membuka aplikasi untuk
-pengguna. Konfigurasikan layanan email production sebelum mengandalkan fitur
-reset password.
+Project ini dibuat sebagai project portofolio pembelajaran.
